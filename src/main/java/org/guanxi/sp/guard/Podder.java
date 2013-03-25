@@ -16,17 +16,17 @@
 
 package org.guanxi.sp.guard;
 
-import org.guanxi.common.Pod;
-import org.guanxi.common.filters.FileName;
-import org.apache.log4j.Logger;
+import java.io.IOException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.ServletException;
-import java.io.IOException;
-import java.util.Properties;
+
+import org.apache.log4j.Logger;
+import org.guanxi.common.Pod;
+import org.guanxi.common.filters.FileName;
 
 /**
  * Adds a Pod full of attributes to the system
@@ -107,7 +107,7 @@ public class Podder extends HttpServlet {
     Pod pod = (Pod)getServletContext().getAttribute(request.getParameter("id"));
 
     // Create a new Guard cookie
-    logger.debug("Creating a new Guard cookie : " + cookieName);
+    logger.debug("Creating a new Guard cookie : name: " + cookieName + " domain: " + cookieDomain);
     Cookie cookie = new Cookie(cookieName,
                                pod.getSessionID());
     cookie.setDomain(cookieDomain);

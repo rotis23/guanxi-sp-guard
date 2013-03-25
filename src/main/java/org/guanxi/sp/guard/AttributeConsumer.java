@@ -16,17 +16,21 @@
 
 package org.guanxi.sp.guard;
 
-import org.guanxi.common.Bag;
-import org.guanxi.common.GuanxiException;
-import org.guanxi.common.Pod;
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.rmi.server.UID;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-import java.io.*;
+
+import org.apache.log4j.Logger;
+import org.guanxi.common.Bag;
+import org.guanxi.common.GuanxiException;
+import org.guanxi.common.Pod;
 
 /**
  * The AttributeConsumer service will load up the Pod previously created by the Podder service and add
@@ -64,14 +68,70 @@ public class AttributeConsumer extends HttpServlet {
       logger.error("Error receiving attributes from Engine: " + ge.getMessage());
     }
     
+    if(bag.isUnsolicitedMode())
+    {
+    	logger.info("Got unsolicited bag: " + bag.getSessionID());
+    	
+    	try {
+			processUnsolicited(bag);
+		} catch (Exception e) {
+			logger.error("Error creating unsolicited bag: " + e.getMessage());
+		}
+    }
+    
+    logger.info("Processing bag: " + bag.getSessionID());
+    
     // Load up the specified session's Pod...
     Pod pod = (Pod)getServletContext().getAttribute(bag.getSessionID());
     // ...and add the bag of attributes
     pod.setBag(bag);
 
     ServletOutputStream os = response.getOutputStream();
-    os.write("OK".getBytes());
+    os.write(pod.getSessionID().getBytes());
     os.close();
+  }
+
+  private void processUnsolicited(Bag bag) throws Exception {
+	  //verify
+	  
+	  //createpod
+	  Pod pod = createPod(bag);
+	  
+	  //reset the bags sessionid
+	  bag.setSessionID(pod.getSessionID()); 
+  }
+  
+  /**
+   * Creates and configures a Pod, ready for population with attributes.
+   *
+   * @param request Servlet request
+   * @return An empty Pod configured for use with the Guard
+ * @throws URISyntaxException 
+ * @throws Exception 
+   */
+  protected Pod createPod(Bag bag) throws Exception {
+
+    // Create a new Pod to encapsulate information for this session
+    Pod pod = new Pod();
+
+    // Store the servlet context for later deactivation of the pod
+    pod.setContext(getServletContext());
+
+    // get the target resource from sessionid
+    URI uri = new URI(bag.getSessionID());
+    
+    
+    pod.setRequestScheme(uri.getScheme());
+    pod.setHostName(uri.getHost().replaceAll("/", "") + ":" +  uri.getPort());
+    pod.setRequestURL(uri.getPath() + uri.getQuery());
+
+    // Store the Pod in a session
+    UID uid = new UID();
+    String sessionID = "GUARD_" + uid.toString().replaceAll(":", "--");
+    pod.setSessionID(sessionID);
+    getServletContext().setAttribute(sessionID, pod);
+
+    return pod;
   }
 
   private Bag getBag(HttpServletRequest request) throws GuanxiException {

@@ -112,6 +112,9 @@ public abstract class GuardBase implements Filter {
                                                   guardConfig.get("cookie.prefix"));
     filterConfig.getServletContext().setAttribute(Definitions.CONTEXT_ATTR_GUARD_COOKIE_NAME,
                                                   guardConfig.get("cookie.prefix") + guardConfig.get("entityid"));
+    
+    logger.info("Found entityid:" + guardConfig.get("entityid"));
+    logger.info("Found host.name:" + guardConfig.get("host.name"));
 
     // The cookie name can be changed at runtime
     cookieName = guardConfig.get("cookie.prefix") + FileName.encode(guardConfig.get("entityid"));
@@ -190,6 +193,8 @@ public abstract class GuardBase implements Filter {
     String sessionID = "GUARD_" + uid.toString().replaceAll(":", "--");
     pod.setSessionID(sessionID);
     filterConfig.getServletContext().setAttribute(sessionID, pod);
+    
+    logger.info("Created pod: " + pod.getSessionID());
 
     return pod;
   }

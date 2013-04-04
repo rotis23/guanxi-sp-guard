@@ -16,18 +16,24 @@
 
 package org.guanxi.sp.guard;
 
-import org.guanxi.common.Pod;
-import org.guanxi.common.filters.FileName;
-import org.apache.log4j.Logger;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.*;
 import java.io.IOException;
 import java.rmi.server.UID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.guanxi.common.Pod;
+import org.guanxi.common.filters.FileName;
 
 /**
  * Base class for Guards
@@ -91,12 +97,13 @@ public abstract class GuardBase implements Filter {
         configFilePath = System.getenv(matcher.group(1)) + matcher.group(2);
       }
       else {
-        configFilePath = filterConfig.getInitParameter("configFile");
+        configFilePath = config.getServletContext().getRealPath(filterConfig.getInitParameter("configFile"));
       }
     }
     else {
       configFilePath = config.getServletContext().getRealPath("/WEB-INF/guanxi_sp_guard/config/guanxi-sp-guard.properties");
     }
+    
     logger.info("Setting config to " + configFilePath);
     guardConfig = new GuardConfig(configFilePath);
 

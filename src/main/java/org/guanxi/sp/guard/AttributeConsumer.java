@@ -136,6 +136,12 @@ public class AttributeConsumer extends HttpServlet {
 
   private Bag getBag(HttpServletRequest request) throws GuanxiException {
     String json = request.getParameter(Definitions.REQUEST_PARAMETER_SAML_ATTRIBUTES);
+    
+    if(logger.isDebugEnabled())
+    {
+    	logger.debug("json:" + json);
+    }
+    
     if (json != null) {
       return new Bag(json);
     }

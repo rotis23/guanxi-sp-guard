@@ -9,6 +9,19 @@ import org.guanxi.common.Pod;
 import org.guanxi.sp.guard.Definitions;
 import org.guanxi.sp.guard.SessionVerifier;
 
+/**
+ * This class extends SessionVerifier to provide support
+ * for systems with multitenancy (dynamic domains)
+ * 
+ * Use DYNAMIC_GUARD_DOMAIN in the guard Podder URL 
+ * e.g. http://DYNAMIC_GUARD_DOMAIN/guard.guanxiGuardPodder
+ * 
+ * Use cookie.domain=.DYNAMIC_GUARD_DOMAIN in the guard config
+ * 
+ * The engine will ask the guard what external multitenancy domain to use 
+ * 
+ * @author rotis23
+ */
 @SuppressWarnings("serial")
 public class DynamicSessionVerifier extends SessionVerifier 
 {

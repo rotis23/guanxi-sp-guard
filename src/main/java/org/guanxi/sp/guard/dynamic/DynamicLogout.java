@@ -2,10 +2,10 @@ package org.guanxi.sp.guard.dynamic;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.guanxi.sp.guard.Podder;
+import org.guanxi.sp.guard.Logout;
 
 /**
- * This class extends Podder to provide support
+ * This class extends Logout to provide support
  * for systems with multitenancy (dynamic domains)
  * 
  * Use DYNAMIC_GUARD_DOMAIN in the guard Podder URL 
@@ -18,16 +18,14 @@ import org.guanxi.sp.guard.Podder;
  * @author rotis23
  */
 @SuppressWarnings("serial")
-public class DynamicPodder extends Podder
+public class DynamicLogout extends Logout
 {
 	private String guardDomainPlaceholder = "DYNAMIC_GUARD_DOMAIN";
-
+	
+	@Override
 	protected String postProcessGetGuardId(String id, HttpServletRequest httpRequest)
 	{
 		return id.replace(guardDomainPlaceholder, httpRequest.getServerName());
 	}
 
-	public void setGuardDomainPlaceholder(String guardDomainPlaceholder) {
-		this.guardDomainPlaceholder = guardDomainPlaceholder;
-	}
 }

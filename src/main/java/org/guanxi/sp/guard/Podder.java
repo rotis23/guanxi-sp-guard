@@ -121,7 +121,7 @@ public class Podder extends HttpServlet {
     response.addCookie(cookie);
 
     // Redirect to the requested resource. The filter will handle access and attributes
-    response.sendRedirect(pod.getRequestScheme() + "://" + pod.getHostName() + pod.getRequestURL());
+    response.sendRedirect(pod.getRequestScheme() + "://" + pod.getHostName() + "?" + pod.getRequestURL());
   }
 
   /**

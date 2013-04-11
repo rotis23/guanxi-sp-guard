@@ -122,8 +122,9 @@ public class AttributeConsumer extends HttpServlet {
     
     
     pod.setRequestScheme(uri.getScheme());
-    pod.setHostName(uri.getHost().replaceAll("/", "") + ":" +  uri.getPort());
-    pod.setRequestURL(uri.getPath() + uri.getQuery());
+    //append the port if set
+    pod.setHostName(uri.getHost().replaceAll("/", "") + ((uri.getPort() == -1) ? "" : ":" +  uri.getPort()));
+    pod.setRequestURL(uri.getPath() + "?" + uri.getQuery());
 
     // Store the Pod in a session
     UID uid = new UID();

@@ -119,9 +119,13 @@ public class Podder extends HttpServlet {
 
     // Add a cookie that points to the pod for this request
     response.addCookie(cookie);
+    
+    String redirectURL = pod.getRequestScheme() + "://" + pod.getHostName() + pod.getRequestURL();
 
+    logger.debug("Sending redirect:" + redirectURL);
+    
     // Redirect to the requested resource. The filter will handle access and attributes
-    response.sendRedirect(pod.getRequestScheme() + "://" + pod.getHostName() + "?" + pod.getRequestURL());
+    response.sendRedirect(redirectURL);
   }
 
   /**

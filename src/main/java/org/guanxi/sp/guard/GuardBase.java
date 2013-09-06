@@ -201,7 +201,7 @@ public abstract class GuardBase implements Filter {
     pod.setSessionID(sessionID);
     filterConfig.getServletContext().setAttribute(sessionID, pod);
     
-    logger.info("Created pod: " + pod.getSessionID());
+    logger.info("Created pod: " + pod.getSessionID() + " hostname: " + pod.getHostName() + " requestURL: " + pod.getRequestURL());
 
     return pod;
   }

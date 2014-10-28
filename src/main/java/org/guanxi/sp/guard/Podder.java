@@ -110,6 +110,7 @@ public class Podder extends HttpServlet {
     logger.debug("Creating a new Guard cookie : name: " + cookieName + " domain: " + cookieDomain);
     Cookie cookie = new Cookie(cookieName,
                                pod.getSessionID());
+    cookie.setSecure(true);
     cookie.setDomain(cookieDomain);
     cookie.setPath(config.get("cookie.path"));
 

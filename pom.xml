@@ -14,7 +14,7 @@
   <name>guanxi-sp-guard</name>
   <groupId>org.guanxi</groupId>
   <artifactId>guanxi-sp-guard</artifactId>
-  <version>3.0.7</version>
+  <version>3.0.8</version>
 
   <organization>
     <name>UHI Millennium Institute</name>
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>org.guanxi</groupId>
       <artifactId>guanxi-common-lite</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.4</version>
     </dependency>
 
     <dependency>

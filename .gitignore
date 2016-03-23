@@ -1,2 +1,7 @@
 *.iml
 target
+*.prefs
+*.plugins*
+.metadata*
+.project
+*.classpath
